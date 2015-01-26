@@ -1,4 +1,3 @@
-from . import zones
 class CloudFlare(object):
     def __init__(self, email, token):
         self.EMAIL = email
