@@ -1,4 +1,5 @@
 from .. import util
+from . import dns_records
 
 ENDPOINT = 'zones'
 
