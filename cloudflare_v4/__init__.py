@@ -1,3 +1,7 @@
+# because everything logs
+import logging
+
+# all the exceptions
 from exceptions import CloudFlareError, CloudFlareAPIError
 
 from construct import CloudFlare
