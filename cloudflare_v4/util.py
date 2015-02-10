@@ -1,13 +1,16 @@
 from . import CloudFlareError, CloudFlareAPIError
+from . import logger
 
 import json
 import requests
 
+logger = logger.Logger(logger.DEBUG).getLogger()
+
 def call(auth, method, endpoint, params=None):
-    logging.debug('auth')
-    logging.debug('method')
-    logging.debug('endpoint')
-    logging.debug('params')
+    logger.debug(auth)
+    logger.debug(method)
+    logger.debug(endpoint)
+    logger.debug(params)
     if (auth is None) or (method is None) or (endpoint is None):
         raise CloudFlareError('You must specify auth, method, and endpoint')
     else:
@@ -18,7 +21,7 @@ def call(auth, method, endpoint, params=None):
                 params=params
                 )
         data = response.text
-        logging.debug('data')
+        logger.debug(data)
         try:
             data = json.loads(data)
             return data
