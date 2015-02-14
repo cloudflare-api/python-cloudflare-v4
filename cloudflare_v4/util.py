@@ -4,24 +4,28 @@ from . import logger
 import json
 import requests
 
-logger = logger.Logger(logger.DEBUG).getLogger()
+logger = logger.Logger(logger.INFO).getLogger()
+BASE_URL = 'https://api.cloudflare.com/client/v4'
 
 def call(auth, method, endpoint, params=None):
-    logger.debug(auth)
-    logger.debug(method)
-    logger.debug(endpoint)
-    logger.debug(params)
+    headers = { "X-Auth-Email": auth['EMAIL'], "X-Auth-Key": auth['TOKEN'] }
+    url = BASE_URL + '/' +  endpoint
+    logger.debug("auth is: " + str(auth))
+    logger.debug("method type is: " + method)
+    logger.debug("url endpoint is: " + url)
+    logger.debug("optional params is: " + str(params))
     if (auth is None) or (method is None) or (endpoint is None):
         raise CloudFlareError('You must specify auth, method, and endpoint')
     else:
-        response = requests.request(method,
-                'https://api.cloudflare.com/client/v4/' + endpoint,
-                headers={ "X-Auth-Email": auth['EMAIL'],
-                          "X-Auth-Key": auth['TOKEN'] },
-                params=params
-                )
+        if method.upper() == 'GET':
+            logger.debug("headers being sent: " + str(headers))
+            response = requests.get(url, headers=headers, params=params)
+        elif method.upper() == 'POST':
+            headers['Content-Type'] = 'application/json'
+            logger.debug("headers being sent: " + str(headers))
+            response = requests.post(url, headers=headers, json=params)
         data = response.text
-        logger.debug(data)
+        logger.debug("data received: " + data)
         try:
             data = json.loads(data)
             return data
