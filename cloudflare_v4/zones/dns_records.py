@@ -7,3 +7,6 @@ def get(auth, zone_id, params=None):
 
 def post(auth, zone_id, params=None):
     return util.call(auth, 'POST', 'zones/' + zone_id + '/' + ENDPOINT, params)
+
+def put(auth, zone_id, params=None):
+    return util.call(auth, 'PUT', 'zones/' + zone_id + '/' + ENDPOINT, params)

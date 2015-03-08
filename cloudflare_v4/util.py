@@ -3,8 +3,15 @@ from . import logger
 
 import json
 import requests
+import logging
 
-logger = logger.Logger(logger.INFO).getLogger()
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+request_logger = logging.getLogger("requests.packages.urllib3")
+request_logger.setLevel(logging.DEBUG)
+request_logger.propagate = True
+
+logger = logger.Logger(logger.DEBUG).getLogger()
 BASE_URL = 'https://api.cloudflare.com/client/v4'
 
 def call(auth, method, endpoint, params=None):
