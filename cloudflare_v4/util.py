@@ -17,6 +17,7 @@ BASE_URL = 'https://api.cloudflare.com/client/v4'
 def call(auth, method, endpoint, params=None):
     headers = { "X-Auth-Email": auth['EMAIL'], "X-Auth-Key": auth['TOKEN'] }
     url = BASE_URL + '/' +  endpoint
+    method = method.upper()
     logger.debug("auth is: " + str(auth))
     logger.debug("method type is: " + method)
     logger.debug("url endpoint is: " + url)
@@ -24,10 +25,10 @@ def call(auth, method, endpoint, params=None):
     if (auth is None) or (method is None) or (endpoint is None):
         raise CloudFlareError('You must specify auth, method, and endpoint')
     else:
-        if method.upper() == 'GET':
+        if method == 'GET':
             logger.debug("headers being sent: " + str(headers))
             response = requests.get(url, headers=headers, params=params)
-        elif method.upper() == 'POST':
+        elif method == 'POST':
             headers['Content-Type'] = 'application/json'
             logger.debug("headers being sent: " + str(headers))
             response = requests.post(url, headers=headers, json=params)
