@@ -32,6 +32,9 @@ def call(auth, method, endpoint, params=None):
             headers['Content-Type'] = 'application/json'
             logger.debug("headers being sent: " + str(headers))
             response = requests.post(url, headers=headers, json=params)
+        elif method == 'DELETE':
+            logger.debug("headers being sent: " + str(headers))
+            response = requests.delete(url, headers=headers, json=params)
         data = response.text
         logger.debug("data received: " + data)
         try:
