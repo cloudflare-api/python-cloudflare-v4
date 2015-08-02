@@ -5,16 +5,21 @@ INFO = 1
 
 class Logger:
     def __init__(self, level):
-        self.logger_level = self.get_level(level)
+        self.logger_level = self._get_logging_level(level)
+
+#        logging.basicConfig(level=self.logger_level)
+
+        request_logger = logging.getLogger("requests.packages.urllib3")
+        request_logger.setLevel(self.logger_level)
+        request_logger.propagate = level
 
     def getLogger(self):
         # create logger
         logger = logging.getLogger('Python CloudFlare API v4')
         logger.setLevel(self.logger_level)
 
-        # create console handler and set level to debug
         ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
+        ch.setLevel(self.logger_level)
 
         # create formatter
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -27,8 +32,8 @@ class Logger:
 
         return logger
 
-    def get_level(self, level):
-        if level == 0:
+    def _get_logging_level(self, level):
+        if level == True:
             return logging.DEBUG
         else:
             return logging.INFO
