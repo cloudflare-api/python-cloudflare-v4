@@ -17,7 +17,7 @@ class CloudFlare(object):
 
         def call(self, method, main_endpoint, endpoint=None, params=None, data=None):
             headers = { "X-Auth-Email": self.EMAIL, "X-Auth-Key": self.TOKEN }
-            if endpoint is not None:
+            if endpoint is not None or (data is not None and method == 'GET'):
                 url = BASE_URL + '/' +  main_endpoint + '/' + params + '/' + endpoint
             else:
                 url = BASE_URL + '/' +  main_endpoint
@@ -33,7 +33,12 @@ class CloudFlare(object):
             else:
                 self.logger.debug("headers being sent: " + str(headers))
                 if method == 'GET':
-                    response = requests.get(url, headers=headers, params=params)
+                    if data:
+                        params_to_send = data
+                    else:
+                        params_to_send = params
+                    response = requests.get(url, headers=headers,
+                        params=params_to_send)
                 elif method == 'POST':
                     headers['Content-Type'] = 'application/json'
                     response = requests.post(url, headers=headers, json=data)
@@ -46,7 +51,7 @@ class CloudFlare(object):
                     if data['success'] is False:
                         raise CloudFlareAPIError(data['errors'][0]['message'])
                     else:
-                        return data
+                        return data['result']
                 except ValueError:
                     raise CloudFlareAPIError('JSON parse failed.')
 
@@ -59,9 +64,9 @@ class CloudFlare(object):
             self.main_endpoint = main_endpoint
             self.endpoint = endpoint
 
-        def get(self, params=None):
+        def get(self, params=None, data=None):
             return self.base_client.call('GET', self.main_endpoint,
-                self.endpoint, params)
+                self.endpoint, params, data)
 
         def post(self, params=None, data=None):
             return self.base_client.call('POST', self.main_endpoint,
