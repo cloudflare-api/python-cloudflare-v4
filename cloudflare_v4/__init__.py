@@ -22,30 +22,33 @@ class CloudFlare(object):
             else:
                 url = BASE_URL + '/' +  main_endpoint
             method = method.upper()
-            self.logger.debug("EMAIL is: " + str(self.EMAIL))
-            self.logger.debug("TOKEN is: " + str(self.TOKEN))
-            self.logger.debug("method type is: " + method)
-            self.logger.debug("url endpoint is: " + url)
-            self.logger.debug("optional params is: " + str(params))
-            self.logger.debug("optional data is: " + str(data))
+            self.logger.debug("EMAIL is: %s" % str(self.EMAIL))
+            self.logger.debug("TOKEN is: %s" % str(self.TOKEN))
+            self.logger.debug("method type is: %s" % method)
+            self.logger.debug("main endpoint is: %s" % main_endpoint)
+            self.logger.debug("optional endpoint is: %s" % endpoint)
+            self.logger.debug("url endpoint is: %s" % url)
+            self.logger.debug("optional params is: %s" % str(params))
+            self.logger.debug("optional data is: %s" % str(data))
             if (method is None) or (main_endpoint is None):
                 raise CloudFlareError('You must specify a method and endpoint') # should never happen
             else:
-                self.logger.debug("headers being sent: " + str(headers))
+                self.logger.debug("headers being sent: %s" % str(headers))
                 if method == 'GET':
                     if data:
                         params_to_send = data
                     else:
                         params_to_send = params
+                    self.logger.debug("params being sent: %s", params_to_send)
                     response = requests.get(url, headers=headers,
                         params=params_to_send)
                 elif method == 'POST':
                     headers['Content-Type'] = 'application/json'
                     response = requests.post(url, headers=headers, json=data)
                 elif method == 'DELETE':
-                    response = requests.delete(url, headers=headers, json=data)
+                    response = requests.delete("%s/%s" % (url, data), headers=headers)
                 data = response.text
-                self.logger.debug("data received: " + data)
+                self.logger.debug("data received: %s" % data)
                 try:
                     data = json.loads(data)
                     if data['success'] is False:
@@ -57,9 +60,9 @@ class CloudFlare(object):
 
     class DynamicClient:
         def __init__(self, base_client, main_endpoint, endpoint=None):
-            base_client.logger.debug("base client is: " + str(base_client))
-            base_client.logger.debug("main endpoint is: " + str(main_endpoint))
-            base_client.logger.debug("endpoint is: " + str(endpoint))
+            base_client.logger.debug("base client is: %s" % str(base_client))
+            base_client.logger.debug("main endpoint is: %s" % str(main_endpoint))
+            base_client.logger.debug("endpoint is: %s" % str(endpoint))
             self.base_client = base_client
             self.main_endpoint = main_endpoint
             self.endpoint = endpoint
