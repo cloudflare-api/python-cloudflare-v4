@@ -1,10 +1,10 @@
 # all the exceptions
-from .exceptions import CloudFlareError, CloudFlareAPIError
+from .exceptions import CloudFlareError, CloudFlareAPIError, CloudFlareInternalError
 from . import logger
 
 import json
 import requests
-
+import urllib
 
 BASE_URL = 'https://api.cloudflare.com/client/v4'
 
@@ -17,6 +17,7 @@ class CloudFlare(object):
 
         def call(self, method, main_endpoint, endpoint=None, params=None, data=None):
             headers = { "X-Auth-Email": self.EMAIL, "X-Auth-Key": self.TOKEN }
+            headers['Content-Type'] = 'application/json'
             if endpoint is not None or (data is not None and method == 'GET'):
                 url = BASE_URL + '/' +  main_endpoint + '/' + params + '/' + endpoint
             else:
@@ -31,7 +32,7 @@ class CloudFlare(object):
             self.logger.debug("optional params is: %s" % str(params))
             self.logger.debug("optional data is: %s" % str(data))
             if (method is None) or (main_endpoint is None):
-                raise CloudFlareError('You must specify a method and endpoint') # should never happen
+                raise CloudFlareInternalError('You must specify a method and endpoint') # should never happen
             else:
                 self.logger.debug("headers being sent: %s" % str(headers))
                 if method == 'GET':
@@ -39,14 +40,19 @@ class CloudFlare(object):
                         params_to_send = data
                     else:
                         params_to_send = params
+                    if params_to_send.has_key('content'):
+                        params_to_send['content'] = urllib.quote(params_to_send['content'])
                     self.logger.debug("params being sent: %s", params_to_send)
                     response = requests.get(url, headers=headers,
                         params=params_to_send)
                 elif method == 'POST':
-                    headers['Content-Type'] = 'application/json'
                     response = requests.post(url, headers=headers, json=data)
                 elif method == 'DELETE':
                     response = requests.delete("%s/%s" % (url, data), headers=headers)
+                elif method == 'PATCH':
+                    pass
+                else:
+                    raise CloudFlareAPIInternalError('method not supported') # should never happen
                 data = response.text
                 self.logger.debug("data received: %s" % data)
                 try:

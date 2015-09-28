@@ -6,3 +6,6 @@ class CloudFlareError(Exception):
 
 class CloudFlareAPIError(CloudFlareError):
     pass
+
+class CloudFlareInternalError(CloudFlareError):
+    pass
