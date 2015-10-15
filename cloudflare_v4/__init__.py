@@ -48,7 +48,10 @@ class CloudFlare(object):
                 elif method == 'POST':
                     response = requests.post(url, headers=headers, json=data)
                 elif method == 'DELETE':
-                    response = requests.delete("%s/%s" % (url, data), headers=headers)
+                    if data:
+                        response = requests.delete(url, headers=headers, json=data)
+                    else:
+                        response = requests.delete(url, headers=headers)
                 elif method == 'PATCH':
                     pass
                 else:
