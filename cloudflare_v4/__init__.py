@@ -47,6 +47,8 @@ class CloudFlare(object):
                         params=params_to_send)
                 elif method == 'POST':
                     response = requests.post(url, headers=headers, json=data)
+                elif method == 'PUT':
+                    response = requests.put(url, headers=headers, json=data)
                 elif method == 'DELETE':
                     if data:
                         response = requests.delete(url, headers=headers, json=data)
@@ -55,7 +57,7 @@ class CloudFlare(object):
                 elif method == 'PATCH':
                     pass
                 else:
-                    raise CloudFlareAPIInternalError('method not supported') # should never happen
+                    raise CloudFlareAPIError('method not supported') # should never happen
                 data = response.text
                 self.logger.debug("data received: %s" % data)
                 try:
@@ -84,9 +86,14 @@ class CloudFlare(object):
             return self.base_client.call('POST', self.main_endpoint,
                 self.endpoint, params, data)
 
+        def put(self, params=None, data=None):
+            return self.base_client.call('PUT', self.main_endpoint,
+                self.endpoint, params, data)
+
         def delete(self, params=None, data=None):
             return self.base_client.call('DELETE', self.main_endpoint,
                 self.endpoint, params, data)
+
 
     def __init__(self, email, token, debug):
         self.base_client = self.BaseClient(email, token, debug)
