@@ -5,6 +5,7 @@ from . import logger
 import json
 import requests
 import urllib
+from . import utils
 
 BASE_URL = 'https://api.cloudflare.com/client/v4'
 
@@ -34,17 +35,18 @@ class CloudFlare(object):
             if (method is None) or (main_endpoint is None):
                 raise CloudFlareInternalError('You must specify a method and endpoint') # should never happen
             else:
-                self.logger.debug("headers being sent: %s" % str(headers))
+                self.logger.debug("headers being sent: %s" %
+                        str(utils.sanitize_secrets(headers)))
                 if method == 'GET':
-                    if data:
-                        params_to_send = data
-                    else:
-                        params_to_send = params
-                    if params_to_send.has_key('content'):
-                        params_to_send['content'] = urllib.quote(params_to_send['content'])
-                    self.logger.debug("params being sent: %s", params_to_send)
-                    response = requests.get(url, headers=headers,
-                        params=params_to_send)
+                    try:
+                        if params.keys():
+                            response = requests.get(url, headers=headers,
+                                params=params)
+                    except AttributeError as ae:
+                        if data:
+                            response = requests.get(url, headers=headers, params=data)
+                        else:
+                            response = requests.get(url, headers=headers)
                 elif method == 'POST':
                     response = requests.post(url, headers=headers, json=data)
                 elif method == 'PUT':
@@ -58,6 +60,8 @@ class CloudFlare(object):
                     pass
                 else:
                     raise CloudFlareAPIError('method not supported') # should never happen
+                self.logger.debug("request url: %s", response.url)
+
                 data = response.text
                 self.logger.debug("data received: %s" % data)
                 try:
