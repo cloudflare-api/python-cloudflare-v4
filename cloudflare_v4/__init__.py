@@ -57,7 +57,7 @@ class CloudFlare(object):
                     else:
                         response = requests.delete(url, headers=headers)
                 elif method == 'PATCH':
-                    pass
+                    response = requests.request('PATCH', url, headers=headers, json=data)
                 else:
                     raise CloudFlareAPIError('method not supported') # should never happen
                 self.logger.debug("request url: %s", response.url)
