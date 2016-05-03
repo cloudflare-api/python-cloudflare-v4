@@ -1,3 +1,4 @@
+
 def sanitize_secrets(secrets):
     redacted_phrase = 'REDACTED'
 
