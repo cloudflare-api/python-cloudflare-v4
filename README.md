@@ -20,11 +20,11 @@ The CloudFlare API can be found [here](https://api.cloudflare.com/). Each API ca
 A very simple listing of zones within your account; including the IPv6 status of the zone.
 
 ```
-from CloudFlare import CloudFlare
+import CloudFlare
 
 def main():
 	cf = CloudFlare.CloudFlare()
-	zones = cf.zones.get(param={'per_page':50})
+	zones = cf.zones.get(params = {'per_page':50})
 	for zone in zones:
 		zone_name = zone['name']
 		zone_id = zone['id']
@@ -117,7 +117,7 @@ The _example_ folder contains many examples in both simple and verbose formats.
 All API calls can be called from the command line. The command will convert domain names on-the-fly into zone_identifier's.
 
 ```
-$ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] /command...
+$ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...
 
 ```
 

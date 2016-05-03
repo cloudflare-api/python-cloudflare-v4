@@ -95,7 +95,7 @@ def cli4(args):
 	quiet = False
 	method = 'GET'
 
-	usage = 'usage: cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] /command...'
+	usage = 'usage: cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...'
 
 	try:
 		opts, args = getopt.getopt(args, 'hvq', ['help', 'verbose', 'quiet', 'get', 'patch', 'post', 'put', 'delete'])
