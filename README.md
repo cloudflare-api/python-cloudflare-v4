@@ -41,6 +41,10 @@ if __name__ == '__main__':
 A more complex example follows.
 
 ```
+import sys
+import CloudFlare
+
+def main():
 	zone_name = 'example.com'
 
 	cf = CloudFlare.CloudFlare()
@@ -48,13 +52,10 @@ A more complex example follows.
 	# query for the zone name and expect only one value back
 	try:
 		zones = cf.zones.get(params = {'name':zone_name,'per_page':1})
-	except ConnectionError, e:
-		# unable to connect to CloudFlare - possibly you're offline
-		print '/zones - api call failed'
-		exit(1)
-	except Exception, e:
-		print '/zones - api call failed'
-		exit(1)
+	except CloudFlare.CloudFlareAPIError as e:
+		exit('/zones.get %d %s - api call failed' % (e, e))
+	except Exception as e:
+		exit('/zones.get - %s - api call failed' % (e))
 
 	# extract the zone_id which is needed to process that zone
 	zone = zones[0]
@@ -63,9 +64,8 @@ A more complex example follows.
 	# request the DNS records from that zone
 	try:
 		dns_records = cf.zones.dns_records.get(zone_id)
-	except Exception, e:
-		print '/zones/dns_records - api call failed'
-		exit(1)
+	except CloudFlare.CloudFlareAPIError as e:
+		exit('/zones/dns_records.get %d %s - api call failed' % (e, e))
 
 	# print the results - first the zone name
 	print zone_id, zone_name
@@ -78,7 +78,10 @@ A more complex example follows.
 		r_id = dns_record['id']
 		print '\t', r_id, r_name, r_type, r_value
 
+	exit(0)
 
+if __name__ == '__main__':
+	main()
 ```
 
 ## Providing CloudFlare Username and API Key
@@ -148,7 +151,6 @@ All API calls can be called from the command line. The command will convert doma
 
 ```
 $ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...
-
 ```
 
 The output from the CLI command is in json format (and human readable).
@@ -169,25 +171,25 @@ The output from the CLI command is in json format (and human readable).
 ### More complex CLI examples
 
 ```
-$ ./cli4.py --delete purge_everything=true /zones/:example.com/purge_cache | jq -c .
+$ cli4 --delete purge_everything=true /zones/:example.com/purge_cache | jq -c .
 {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
 $
 
-$ ./cli4.py --delete files='[http://example.com/css/styles.css]' /zones/:example.com/purge_cache | jq -c .
+$ cli4 --delete files='[http://example.com/css/styles.css]' /zones/:example.com/purge_cache | jq -c .
 {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
 $
 
-$ ./cli4.py --delete files='[http://example.com/css/styles.css,http://example.com/js/script.js] /zones/:example.com/purge_cache | jq -c .
+$ cli4 --delete files='[http://example.com/css/styles.css,http://example.com/js/script.js] /zones/:example.com/purge_cache | jq -c .
 {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
 $
 
-$ ./cli4.py --delete tags='[tag1,tag2,tag3]' /zones/:example.com/purge_cache | jq -c .
+$ cli4 --delete tags='[tag1,tag2,tag3]' /zones/:example.com/purge_cache | jq -c .
 cli4: /zones/:example.com/purge_cache - 1107 Only enterprise zones can purge by tag.
 $
 ```
 
 ```
-$ ./cli4.py /zones/:example.com/available_plans | jq -c '.[]|{"id":.id,"name":.name}'
+$ cli4 /zones/:example.com/available_plans | jq -c '.[]|{"id":.id,"name":.name}'
 {"id":"a577b510288e82b26486fd1df47000ec","name":"Pro Website"}
 {"id":"1ac039f6c29b691475c3d74fe588d1ae","name":"Business Website"}
 {"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise Website"}
@@ -198,15 +200,15 @@ $
 ### DNSSEC CLI examples
 
 ```
-$ ./cli4.py /zones/:example.com/dnssec | jq -c '{"status":.status}'
+$ cli4 /zones/:example.com/dnssec | jq -c '{"status":.status}'
 {"status":"disabled"}
 $
 
-$ ./cli4.py --patch status=active /zones/:example.com/dnssec | jq -c '{"status":.status}'
+$ cli4 --patch status=active /zones/:example.com/dnssec | jq -c '{"status":.status}'
 {"status":"pending"}
 $
 
-$ ./cli4.py /zones/:example.com/dnssec 
+$ cli4 /zones/:example.com/dnssec 
 {
     "algorithm": "13", 
     "digest": "41600621c65065b09230ebc9556ced937eb7fd86e31635d0025326ccf09a7194", 
@@ -221,7 +223,6 @@ $ ./cli4.py /zones/:example.com/dnssec
     "status": "pending"
 }
 $ 
-
 ```
 
 ## Implemented API calls
