@@ -160,7 +160,7 @@ def cli4(args):
 		if element[0] == ':':
 			element = element[1:]
 			if identifier1 is None:
-				if len(element) == 32 and hex_only.match(element):
+				if len(element) in [32, 40, 48] and hex_only.match(element):
 					# raw identifier - lets just use it as-is
 					identifier1 = element
 				elif cmd[0] == 'certificates':
@@ -179,7 +179,7 @@ def cli4(args):
 					exit(0)
 				cmd.append(':' + identifier1)
 			else:
-				if len(element) == 32 and hex_only.match(element):
+				if len(element) in [32, 40, 48] and hex_only.match(element):
 					# raw identifier - lets just use it as-is
 					identifier2 = element
 				else:
@@ -203,7 +203,7 @@ def cli4(args):
 		elif method is 'POST':
 			r = m.post(identifier1 = identifier1, identifier2 = identifier2, data = params)
 		elif method is 'PUT':
-			r = m.put(identifier1 = identifier1, identifier2 = identifier2, params = params)
+			r = m.put(identifier1 = identifier1, identifier2 = identifier2, data = params)
 		elif method is 'DELETE':
 			r = m.delete(identifier1 = identifier1, identifier2 = identifier2, data = params)
 		else:
