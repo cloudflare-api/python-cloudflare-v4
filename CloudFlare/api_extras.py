@@ -8,7 +8,6 @@ def api_extras(self, extras=None):
 		extra = re.sub(r"^.*/client/v4/", '/', extra)
 		extra = re.sub(r"^.*/v4/", '/', extra)
 		extra = re.sub(r"^/", '', extra)
-		current = self
 
 		# build parts of the extra command
 		parts = []
@@ -25,11 +24,15 @@ def api_extras(self, extras=None):
 
 		# insert extra command into class
 		element_path = []
+		current = self
 		for element in parts[0]:
 			element_path.append(element)
 			try:
-				current = getattr(current, element)
-				# exists
+				m = getattr(current, element)
+				# exists - but still add it there's a second part
+				if element == parts[0][-1] and len(parts) > 1:
+					setattr(m, parts[1][0], self._client_with_auth(self.base, '/'.join(element_path), '/'.join(parts[1])))
+				current = m
 				continue
 			except:
 				pass
