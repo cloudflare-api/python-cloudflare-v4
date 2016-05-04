@@ -3,6 +3,7 @@ from logger import Logger
 from utils import sanitize_secrets
 from read_configs import read_configs
 from api_v4 import api_v4
+from api_extras import api_extras
 
 from exceptions import CloudFlareError, CloudFlareAPIError, CloudFlareInternalError
 
@@ -171,7 +172,7 @@ class CloudFlare(object):
 	base_url = BASE_URL
 
 	# class creation values override configuration values
-	[ conf_email, conf_token, conf_certtoken ] = read_configs()
+	[ conf_email, conf_token, conf_certtoken, extras ] = read_configs()
 
 	if email is None:
 		email = conf_email
@@ -188,4 +189,5 @@ class CloudFlare(object):
 
 	# add the API calls
 	api_v4(self)
+	api_extras(self, extras)
 

@@ -32,5 +32,12 @@ def read_configs():
 		except:
 			certtoken = None
 
-	return [ email, token, certtoken ]
+	try:
+		extras = re.sub(r"\s+", ' ', config.get('CloudFlare', 'extras'))
+	except:
+		extras = None
+
+	extras = extras.split(' ')
+
+	return [ email, token, certtoken, extras ]
 

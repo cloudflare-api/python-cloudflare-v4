@@ -440,3 +440,20 @@ $
 
 	GET     /ips
 ```
+
+## Adding extra API calls manually
+
+Extra API calls can be added via the configuration file
+```
+$ cat ~/.cloudflare/cloudflare.cfg 
+[CloudFlare]
+extras=
+        /client/v4/command
+        /client/v4/command/:command_identifier
+        /client/v4/command/:command_identifier/settings
+$
+```
+
+While it's easy to call anything within CloudFlare's API, it's not very useful to add items in here as they will simply return API URL errors.
+Technically, this is only useful for internal testing within CloudFlare.
+
