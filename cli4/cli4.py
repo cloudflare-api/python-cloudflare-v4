@@ -119,6 +119,8 @@ def cli4(args):
 		elif opt in ('-D', '--delete'):
 			method = 'DELETE'
 
+	digits_only = re.compile('^[0-9]+$')
+
 	# next grab the params. These are in the form of tag=value
 	params = {}
 	while len(args) > 0 and '=' in args[0]:
@@ -127,8 +129,8 @@ def cli4(args):
 			value = True
 		elif value == 'false':
 			value = False
-	#	elif value.isdigit():
-	#		value = int(value)
+		elif digits_only.match(value):
+			value = int(value)
 		elif value[0] is '[' and value[-1] is ']':
 			value = value[1:-1].split(',')
 		params[tag] = value
