@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
+import os
 from setuptools import setup, find_packages
+
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
 
 setup(
     name='python-cloudflare-v4',
@@ -10,6 +14,7 @@ setup(
     author_email='felix@fawong.com,mahtin@mahin.com',
     url='https://github.com/mahtin/python-cloudflare-v4',
     packages=['cli4']+find_packages(),
+    install_requires=required,
     entry_points={
 	'console_scripts': [
 	    'cli4 = cli4.__main__:main'
