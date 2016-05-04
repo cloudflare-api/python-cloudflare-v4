@@ -163,7 +163,7 @@ $ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--dele
 ```
 
 For API calls that need a set of date or parameters passed there is a item=value format.
-If you want a numeric value passed, then _**_ can be used to force the value to be treated as a numeric value.
+If you want a numeric value passed, then _==_ can be used to force the value to be treated as a numeric value.
 
 The output from the CLI command is in json format (and human readable).
 
