@@ -36,9 +36,9 @@ class CloudFlare(object):
 	    return self._call(method, headers, api_call_part1, api_call_part2, identifier1, identifier2, params, data)
 
         def _call_with_certauth(self, method, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
-	    if self.EMAIL is '' or self.CERTTOKEN is '':
+	    if self.CERTTOKEN is '':
                 raise CloudFlareAPIError(0, 'no email and/or cert token defined')
-            headers = { "X-Auth-Email": self.EMAIL, "X-Auth-User-Service-Key": self.CERTTOKEN, 'Content-Type': 'application/json' }
+            headers = { "X-Auth-User-Service-Key": self.CERTTOKEN, 'Content-Type': 'application/json' }
 	    return self._call(method, headers, api_call_part1, api_call_part2, identifier1, identifier2, params, data)
 
         def _call(self, method, headers, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
@@ -68,9 +68,9 @@ class CloudFlare(object):
             if method == 'GET':
                 response = requests.get(url, headers=headers, params=params, data=data)
             elif method == 'POST':
-                response = requests.post(url, headers=headers, json=data)
+                response = requests.post(url, headers=headers, params=params, json=data)
             elif method == 'PUT':
-                response = requests.put(url, headers=headers, json=data)
+                response = requests.put(url, headers=headers, params=params, json=data)
             elif method == 'DELETE':
                 if data:
                     response = requests.delete(url, headers=headers, json=data)
