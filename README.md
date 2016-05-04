@@ -3,7 +3,7 @@
 
 ## Credit
 
-This is based on work by _gnowxilef_ found [here](https://github.com/cloudflare-api/python-cloudflare-v4). It has been seriously expanded upon.
+This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4). It has been seriously expanded upon.
 
 ## CloudFlare API version 4
 
@@ -12,8 +12,11 @@ The CloudFlare API can be found [here](https://api.cloudflare.com/). Each API ca
 ## Installation
 
 ```
-	./setup.py install
+	./setup.py build
+	sudo ./setup.py install
 ```
+
+Or whatever variance of that you want to use.
 
 ## Getting Started
 
@@ -94,10 +97,13 @@ When you create a _CloudFlare_ class you can pass up to three paramaters.
 
 If the account email and API key are not passed when you create the class, then they are retreived from either the users exported shell environment variables or the .cloudflare.cfg or ~/.cloudflare.cfg or ~/.cloudflare/cloudflare.cfg files, in that order.
 
+There is one call that presently doesn't need any email or token certification (the */ips* call); hence you can test without any values saved away.
+
 ### Using shell environment variables
 ```
 $ export CF_API_EMAIL='user@example.com'
 $ export CF_API_KEY='00000000000000000000000000000000'
+$ export CF_API_CERTKEY='v1.0-...'
 $
 ```
 
@@ -108,12 +114,15 @@ $ cat ~/.cloudflare/cloudflare.cfg
 [CloudFlare]
 email = user@example.com
 token = 00000000000000000000000000000000
+certoken = v1.0-...
 $
 ```
 
+The *CF_API_CERTKEY* or *certtoken* values are used for the Origin-CA */certificates* API calls.
+
 ## Included example code
 
-The _examples_ folder contains many examples in both simple and verbose formats.
+The *examples* folder contains many examples in both simple and verbose formats.
 
 ## A DNS zone code example
 
