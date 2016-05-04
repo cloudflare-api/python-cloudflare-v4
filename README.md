@@ -162,6 +162,9 @@ All API calls can be called from the command line. The command will convert doma
 $ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...
 ```
 
+For API calls that need a set of date or parameters passed there is a item=value format.
+If you want a numeric value passed, then _**_ can be used to force the value to be treated as a numeric value.
+
 The output from the CLI command is in json format (and human readable).
 
 ### Simple CLI examples

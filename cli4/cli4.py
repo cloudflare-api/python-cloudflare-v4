@@ -124,13 +124,13 @@ def cli4(args):
 	# next grab the params. These are in the form of tag=value
 	params = {}
 	while len(args) > 0 and '=' in args[0]:
-		tag, value = args.pop(0).split('=')
+		tag, value = args.pop(0).split('=', 1)
 		if value == 'true':
 			value = True
 		elif value == 'false':
 			value = False
-		elif digits_only.match(value):
-			value = int(value)
+		elif value[0] is '=' and digits_only.match(value[1:]):
+			value = int(value[1:])
 		elif value[0] is '[' and value[-1] is ']':
 			value = value[1:-1].split(',')
 		params[tag] = value
