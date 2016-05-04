@@ -3,7 +3,11 @@
 
 ## Credit
 
-This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4). It has been seriously expanded upon.
+This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4).  It has been seriously expanded upon.
+
+## Copyright
+
+Portions copyright [Felix Wong (gnowxilef)](https://github.com/gnowxilef) 2015 and CloudFlare 2016.
 
 ## CloudFlare API version 4
 

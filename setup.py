@@ -11,8 +11,8 @@ setup(
     version='1.1',
     description='Python wrapper for the CloudFlare v4 API',
     author='gnowxilef,Martin J. Levy',
-    author_email='felix@fawong.com,mahtin@mahin.com',
-    url='https://github.com/mahtin/python-cloudflare-v4',
+    author_email='felix@fawong.com,martin@cloudflare.com',
+    url='https://github.com/cloudflare/python-cloudflare',
     packages=['cli4']+find_packages(),
     install_requires=required,
     entry_points={
