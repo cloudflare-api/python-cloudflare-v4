@@ -15,7 +15,7 @@ The CloudFlare API can be found [here](https://api.cloudflare.com/). Each API ca
 
 ## Installation
 
-```
+```bash
 	./setup.py build
 	sudo ./setup.py install
 ```
@@ -26,7 +26,7 @@ Or whatever variance of that you want to use.
 
 A very simple listing of zones within your account; including the IPv6 status of the zone.
 
-```
+```python
 import CloudFlare
 
 def main():
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
 A more complex example follows.
 
-```
+```python
 import sys
 import CloudFlare
 
@@ -104,7 +104,7 @@ If the account email and API key are not passed when you create the class, then 
 There is one call that presently doesn't need any email or token certification (the */ips* call); hence you can test without any values saved away.
 
 ### Using shell environment variables
-```
+```bash
 $ export CF_API_EMAIL='user@example.com'
 $ export CF_API_KEY='00000000000000000000000000000000'
 $ export CF_API_CERTKEY='v1.0-...'
@@ -113,7 +113,7 @@ $
 
 ### Using configuration file to store email and keys
 
-```
+```bash
 $ cat ~/.cloudflare/cloudflare.cfg 
 [CloudFlare]
 email = user@example.com
@@ -130,7 +130,7 @@ The *examples* folder contains many examples in both simple and verbose formats.
 
 ## A DNS zone code example
 
-```
+```python
 #!/usr/bin/env python
 
 import sys
@@ -162,7 +162,7 @@ if __name__ == '__main__':
 
 All API calls can be called from the command line. The command will convert domain names on-the-fly into zone_identifier's.
 
-```
+```bash
 $ cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...
 ```
 
@@ -186,7 +186,7 @@ The output from the CLI command is in json format (and human readable).
 
 ### More complex CLI examples
 
-```
+```bash
 $ cli4 --delete purge_everything=true /zones/:example.com/purge_cache | jq -c .
 {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
 $
@@ -204,7 +204,7 @@ cli4: /zones/:example.com/purge_cache - 1107 Only enterprise zones can purge by 
 $
 ```
 
-```
+```bash
 $ cli4 /zones/:example.com/available_plans | jq -c '.[]|{"id":.id,"name":.name}'
 {"id":"a577b510288e82b26486fd1df47000ec","name":"Pro Website"}
 {"id":"1ac039f6c29b691475c3d74fe588d1ae","name":"Business Website"}
@@ -215,7 +215,7 @@ $
 
 ### DNSSEC CLI examples
 
-```
+```bash
 $ cli4 /zones/:example.com/dnssec | jq -c '{"status":.status}'
 {"status":"disabled"}
 $
@@ -451,7 +451,7 @@ $
 ## Adding extra API calls manually
 
 Extra API calls can be added via the configuration file
-```
+```bash
 $ cat ~/.cloudflare/cloudflare.cfg 
 [CloudFlare]
 extras=
