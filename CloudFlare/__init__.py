@@ -26,23 +26,23 @@ class CloudFlare(object):
 	    else:
 		self.logger = None
 
-        def _call_with_no_auth(self, method, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
+        def _call_with_no_auth(self, method, api_call_part1, api_call_part2=None, api_call_part3=None, identifier1=None, identifier2=None, params=None, data=None):
 	    headers = {}
-	    return self._call(method, headers, api_call_part1, api_call_part2, identifier1, identifier2, params, data)
+	    return self._call(method, headers, api_call_part1, api_call_part2, api_call_part3, identifier1, identifier2, params, data)
 
-        def _call_with_auth(self, method, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
+        def _call_with_auth(self, method, api_call_part1, api_call_part2=None, api_call_part3=None, identifier1=None, identifier2=None, params=None, data=None):
 	    if self.EMAIL is '' or self.TOKEN is '':
                 raise CloudFlareAPIError(0, 'no email and/or token defined')
             headers = { "X-Auth-Email": self.EMAIL, "X-Auth-Key": self.TOKEN, 'Content-Type': 'application/json' }
-	    return self._call(method, headers, api_call_part1, api_call_part2, identifier1, identifier2, params, data)
+	    return self._call(method, headers, api_call_part1, api_call_part2, api_call_part3, identifier1, identifier2, params, data)
 
-        def _call_with_certauth(self, method, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
+        def _call_with_certauth(self, method, api_call_part1, api_call_part2=None, api_call_part3=None, identifier1=None, identifier2=None, params=None, data=None):
 	    if self.CERTTOKEN is '':
                 raise CloudFlareAPIError(0, 'no email and/or cert token defined')
             headers = { "X-Auth-User-Service-Key": self.CERTTOKEN, 'Content-Type': 'application/json' }
-	    return self._call(method, headers, api_call_part1, api_call_part2, identifier1, identifier2, params, data)
+	    return self._call(method, headers, api_call_part1, api_call_part2, api_call_part3, identifier1, identifier2, params, data)
 
-        def _call(self, method, headers, api_call_part1, api_call_part2=None, identifier1=None, identifier2=None, params=None, data=None):
+        def _call(self, method, headers, api_call_part1, api_call_part2=None, api_call_part3=None, identifier1=None, identifier2=None, params=None, data=None):
             if api_call_part2 is not None or (data is not None and method == 'GET'):
 		if identifier2 is None:
                     url = self.BASE_URL + '/' +  api_call_part1 + '/' + identifier1 + '/' + api_call_part2
@@ -53,9 +53,11 @@ class CloudFlare(object):
 		    url = self.BASE_URL + '/' +  api_call_part1
 		else:
 		    url = self.BASE_URL + '/' +  api_call_part1 + '/' + identifier1
+	    if api_call_part3:
+		url += '/' + api_call_part3
 
 	    if self.logger:
-	        self.logger.debug("Call: %s,%s,%s,%s" % (str(api_call_part1), str(identifier1), str(api_call_part2), str(identifier2)))
+	        self.logger.debug("Call: %s,%s,%s,%s,%s" % (str(api_call_part1), str(identifier1), str(api_call_part2), str(identifier2), str(api_call_part3)))
 	        self.logger.debug("Call: optional params and data: %s %s" % (str(params), str(data)))
 	        self.logger.debug("Call: url is: %s" % (str(url)))
 	        self.logger.debug("Call: method is: %s" % (str(method)))
@@ -104,69 +106,73 @@ class CloudFlare(object):
 	    return response_data['result']
 
     class _unused:
-        def __init__(self, base, api_call_part1, api_call_part2=None):
+        def __init__(self, base, api_call_part1, api_call_part2=None, api_call_part3=None):
 	    #if self.logger:
 	    #    self.logger.debug("_unused %s,%s,%s" % (str(base), str(api_call_part1), str(api_call_part2)))
             self.base = base
             self.api_call_part1 = api_call_part1
             self.api_call_part2 = api_call_part2
+            self.api_call_part3 = api_call_part3
 
     class _client_noauth:
-        def __init__(self, base, api_call_part1, api_call_part2=None):
+        def __init__(self, base, api_call_part1, api_call_part2=None, api_call_part3=None):
 	    #if self.logger:
 	    #    self.logger.debug("_client_noauth %s,%s,%s" % (str(base), str(api_call_part1), str(api_call_part2)))
             self.base = base
             self.api_call_part1 = api_call_part1
             self.api_call_part2 = api_call_part2
+            self.api_call_part3 = api_call_part3
 
         def get(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_no_auth('GET', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_no_auth('GET', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
     class _client_with_auth:
-        def __init__(self, base, api_call_part1, api_call_part2=None):
+        def __init__(self, base, api_call_part1, api_call_part2=None, api_call_part3=None):
 	    #if self.logger:
 	    #    self.logger.debug("_client_with_auth %s,%s,%s" % (str(base), str(api_call_part1), str(api_call_part2)))
             self.base = base
             self.api_call_part1 = api_call_part1
             self.api_call_part2 = api_call_part2
+            self.api_call_part3 = api_call_part3
 
         def get(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_auth('GET', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_auth('GET', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def patch(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_auth('PATCH', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_auth('PATCH', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def post(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_auth('POST', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_auth('POST', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def put(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_auth('PUT', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_auth('PUT', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def delete(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_auth('DELETE', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_auth('DELETE', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
     class _client_with_cert_auth:
-        def __init__(self, base, api_call_part1, api_call_part2=None):
+        def __init__(self, base, api_call_part1, api_call_part2=None, api_call_part3=None):
 	    #if self.logger:
 	    #    self.logger.debug("_client_with_cert_auth %s,%s,%s" % (str(base), str(api_call_part1), str(api_call_part2)))
             self.base = base
             self.api_call_part1 = api_call_part1
             self.api_call_part2 = api_call_part2
+            self.api_call_part3 = api_call_part3
 
         def get(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_certauth('GET', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_certauth('GET', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def patch(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_certauth('PATCH', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_certauth('PATCH', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def post(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_certauth('POST', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_certauth('POST', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def put(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_certauth('PUT', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_certauth('PUT', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
         def delete(self, identifier1=None, identifier2=None, params=None, data=None):
-            return self.base._call_with_certauth('DELETE', self.api_call_part1, self.api_call_part2, identifier1, identifier2, params, data)
+            return self.base._call_with_certauth('DELETE', self.api_call_part1, self.api_call_part2, self.api_call_part3, identifier1, identifier2, params, data)
 
     def __init__(self, email=None, token=None, certtoken=None, debug=False):
 	base_url = BASE_URL
