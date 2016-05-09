@@ -72,6 +72,9 @@ def api_v4(self):
 	setattr(zones, "firewall", self._unused(self.base, "zones", "firewall"))
 	zones_firewall = getattr(zones, "firewall")
 	setattr(zones_firewall, "access_rules", self._unused(self.base, "zones", "firewall/access_rules"))
+	setattr(zones_firewall, "waf", self._unused(self.base, "zones", "firewall/waf"))
+	zones_firewall_waf = getattr(zones_firewall, "waf")
+	setattr(zones_firewall_waf, "packages", self._client_with_auth(self.base, "zones", "firewall/waf/packages"))
 	zones_firewall_access_rules = getattr(zones_firewall, "access_rules")
 	setattr(zones_firewall_access_rules, "rules", self._client_with_auth(self.base, "zones", "firewall/access_rules/rules"))
 
@@ -84,6 +87,7 @@ def api_v4(self):
 	setattr(self, "organizations", self._client_with_auth(self.base, "organizations"))
 	organizations = getattr(self, "organizations")
 	setattr(organizations, "members", self._client_with_auth(self.base, "organizations", "members"))
+	setattr(organizations, "invite", self._client_with_auth(self.base, "organizations", "invite"))
 	setattr(organizations, "invites", self._client_with_auth(self.base, "organizations", "invites"))
 	setattr(organizations, "railguns", self._client_with_auth(self.base, "organizations", "railguns"))
 	setattr(organizations, "roles", self._client_with_auth(self.base, "organizations", "roles"))
@@ -102,12 +106,10 @@ def api_v4(self):
 
 	# The DNSSEC commands
 	setattr(zones, "dnssec", self._client_with_auth(self.base, "zones", "dnssec"))
-	zones_dnssec = getattr(zones, "dnssec")
-	setattr(zones_dnssec, "status", self._client_with_auth(self.base, "zones", "dnssec/status"))
 
 	# EXTRAS
 	# /zones/:zone_id/ssl/certificate_packs
-	setattr(zones, "ssl", self._client_with_auth(self.base, "zones", "ssl"))
+	setattr(zones, "ssl", self._unused(self.base, "zones", "ssl"))
 	zones_ssl = getattr(zones, "ssl")
 	setattr(zones_ssl, "certificate_packs", self._client_with_auth(self.base, "zones", "ssl/certificate_packs"))
 
