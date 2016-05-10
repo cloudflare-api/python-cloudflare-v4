@@ -243,210 +243,83 @@ $
 
 ## Implemented API calls
 
-```
-	GET     /user
-	PATCH   /user
-
-	GET     /user/billing/history
-	GET     /user/billing/profile
-	GET     /user/billing/subscriptions/apps
-	GET     /user/billing/subscriptions/apps/:identifier
-	GET     /user/billing/subscriptions/zones
-	GET     /user/billing/subscriptions/zones/:identifier
-
-	GET     /user/firewall/access_rules/rules
-	POST    /user/firewall/access_rules/rules
-	PATCH   /user/firewall/access_rules/rules/:identifier
-	DELETE  /user/firewall/access_rules/rules/:identifier
-
-	GET     /user/organizations
-	GET     /user/organizations/:organization_identifier
-	DELETE  /user/organizations/:organization_identifier
-
-	GET     /user/invites
-	GET     /user/invites/:identifier
-	PATCH   /user/invites/:identifier
-
-	GET     /zones
-	POST    /zones
-	GET     /zones/:zone_identifier
-	PATCH   /zones/:zone_identifier
-	DELETE  /zones/:zone_identifier
-
-	PUT     /zones/:zone_identifier/activation_check
-
-	GET     /zones/:zone_identifier/analytics/colos
-	GET     /zones/:zone_identifier/analytics/dashboard
-
-	GET     /zones/:zone_identifier/available_plans
-	GET     /zones/:zone_identifier/available_plans/:identifier
-
-	GET     /zones/:zone_identifier/dns_records
-	POST    /zones/:zone_identifier/dns_records
-	GET     /zones/:zone_identifier/dns_records/:identifier
-	PUT     /zones/:zone_identifier/dns_records/:identifier
-	DELETE  /zones/:zone_identifier/dns_records/:identifier
-
-	DELETE  /zones/:zone_identifier/purge_cache
-
-	GET     /zones/:zone_identifier/railguns
-	GET     /zones/:zone_identifier/railguns/:identifier
-	PATCH   /zones/:zone_identifier/railguns/:identifier
-	GET     /zones/:zone_identifier/railguns/:identifier/diagnose
-
-	GET     /zones/:zone_identifier/settings
-	PATCH   /zones/:zone_identifier/settings
-	GET     /zones/:zone_identifier/settings/advanced_ddos
-	GET     /zones/:zone_identifier/settings/always_online
-	PATCH   /zones/:zone_identifier/settings/always_online
-	GET     /zones/:zone_identifier/settings/browser_cache_ttl
-	PATCH   /zones/:zone_identifier/settings/browser_cache_ttl
-	GET     /zones/:zone_identifier/settings/browser_check
-	PATCH   /zones/:zone_identifier/settings/browser_check
-	GET     /zones/:zone_identifier/settings/cache_level
-	PATCH   /zones/:zone_identifier/settings/cache_level
-	GET     /zones/:zone_identifier/settings/challenge_ttl
-	PATCH   /zones/:zone_identifier/settings/challenge_ttl
-	GET     /zones/:zone_identifier/settings/development_mode
-	PATCH   /zones/:zone_identifier/settings/development_mode
-	GET     /zones/:zone_identifier/settings/email_obfuscation
-	PATCH   /zones/:zone_identifier/settings/email_obfuscation
-	GET     /zones/:zone_identifier/settings/hotlink_protection
-	PATCH   /zones/:zone_identifier/settings/hotlink_protection
-	GET     /zones/:zone_identifier/settings/ip_geolocation
-	PATCH   /zones/:zone_identifier/settings/ip_geolocation
-	GET     /zones/:zone_identifier/settings/ipv6
-	PATCH   /zones/:zone_identifier/settings/ipv6
-	GET     /zones/:zone_identifier/settings/minify
-	PATCH   /zones/:zone_identifier/settings/minify
-	GET     /zones/:zone_identifier/settings/mirage
-	PATCH   /zones/:zone_identifier/settings/mirage
-	GET     /zones/:zone_identifier/settings/mobile_redirect
-	PATCH   /zones/:zone_identifier/settings/mobile_redirect
-	GET     /zones/:zone_identifier/settings/origin_error_page_pass_thru
-	PATCH   /zones/:zone_identifier/settings/origin_error_page_pass_thru
-	GET     /zones/:zone_identifier/settings/polish
-	PATCH   /zones/:zone_identifier/settings/polish
-	GET     /zones/:zone_identifier/settings/prefetch_preload
-	PATCH   /zones/:zone_identifier/settings/prefetch_preload
-	GET     /zones/:zone_identifier/settings/response_buffering
-	PATCH   /zones/:zone_identifier/settings/response_buffering
-	GET     /zones/:zone_identifier/settings/rocket_loader
-	PATCH   /zones/:zone_identifier/settings/rocket_loader
-	GET     /zones/:zone_identifier/settings/security_header
-	PATCH   /zones/:zone_identifier/settings/security_header
-	GET     /zones/:zone_identifier/settings/security_level
-	PATCH   /zones/:zone_identifier/settings/security_level
-	GET     /zones/:zone_identifier/settings/server_side_exclude
-	PATCH   /zones/:zone_identifier/settings/server_side_exclude
-	GET     /zones/:zone_identifier/settings/sort_query_string_for_cache
-	PATCH   /zones/:zone_identifier/settings/sort_query_string_for_cache
-	GET     /zones/:zone_identifier/settings/ssl
-	PATCH   /zones/:zone_identifier/settings/ssl
-	GET     /zones/:zone_identifier/settings/tls_1_2_only
-	PATCH   /zones/:zone_identifier/settings/tls_1_2_only
-	GET     /zones/:zone_identifier/settings/tls_client_auth
-	PATCH   /zones/:zone_identifier/settings/tls_client_auth
-	GET     /zones/:zone_identifier/settings/true_client_ip_header
-	PATCH   /zones/:zone_identifier/settings/true_client_ip_header
-	GET     /zones/:zone_identifier/settings/waf
-	PATCH   /zones/:zone_identifier/settings/waf
-
-	GET     /railguns
-	POST    /railguns
-	GET     /railguns/:identifier
-	PATCH   /railguns/:identifier
-	DELETE  /railguns/:identifier
-	GET     /railguns/:identifier/zones
-
-	GET     /zones/:zone_identifier/firewall/access_rules/rules
-	POST    /zones/:zone_identifier/firewall/access_rules/rules
-	PATCH   /zones/:zone_identifier/firewall/access_rules/rules/:identifier
-	DELETE  /zones/:zone_identifier/firewall/access_rules/rules/:identifier
-
-	GET     /zones/:zone_identifier/firewall/waf/packages/:package_identifier/rules
-	GET     /zones/:zone_identifier/firewall/waf/packages/:package_identifier/rules/:identifier
-	PATCH   /zones/:zone_identifier/firewall/waf/packages/:package_identifier/rules/:identifier
-
-	GET     /zones/:zone_identifier/custom_certificates
-	POST    /zones/:zone_identifier/custom_certificates
-	GET     /zones/:zone_identifier/custom_certificates/:identifier
-	PATCH   /zones/:zone_identifier/custom_certificates/:identifier
-	DELETE  /zones/:zone_identifier/custom_certificates/:identifier
-	PUT     /zones/:zone_identifier/custom_certificates/prioritize
-
-	GET     /zones/:zone_identifier/custom_pages
-	GET     /zones/:zone_identifier/custom_pages/:identifier
-	PUT     /zones/:zone_identifier/custom_pages/:identifier
-
-	GET     /zones/:zone_identifier/firewall/waf/packages
-	GET     /zones/:zone_identifier/firewall/waf/packages/:identifier
-	PATCH   /zones/:zone_identifier/firewall/waf/packages/:identifier
-	GET     /zones/:zone_identifier/firewall/waf/packages/:package_identifier/groups
-	GET     /zones/:zone_identifier/firewall/waf/packages/:package_identifier/groups/:identifier
-	PATCH   /zones/:zone_identifier/firewall/waf/packages/:package_identifier/groups/:identifier
-
-	GET     /zones/:zone_identifier/keyless_certificates
-	POST    /zones/:zone_identifier/keyless_certificates
-	GET     /zones/:zone_identifier/keyless_certificates/:identifier
-	PATCH   /zones/:zone_identifier/keyless_certificates/:identifier
-	DELETE  /zones/:zone_identifier/keyless_certificates/:identifier
-
-	GET     /zones/:zone_identifier/pagerules
-	POST    /zones/:zone_identifier/pagerules
-	GET     /zones/:zone_identifier/pagerules/:identifier
-	PUT     /zones/:zone_identifier/pagerules/:identifier
-	PATCH   /zones/:zone_identifier/pagerules/:identifier
-	DELETE  /zones/:zone_identifier/pagerules/:identifier
-
-	GET     /organizations/:organization_identifier
-	PATCH   /organizations/:organization_identifier
-
-	GET     /organizations/:organization_identifier/members
-	GET     /organizations/:organization_identifier/members/:identifier
-	PATCH   /organizations/:organization_identifier/members/:identifier
-	DELETE  /organizations/:organization_identifier/members/:identifier
-
-	GET     /organizations/:organization_identifier/invites
-	POST    /organizations/:organization_identifier/invites
-	GET     /organizations/:organization_identifier/invites/:identifier
-	PATCH   /organizations/:organization_identifier/invites/:identifier
-	DELETE  /organizations/:organization_identifier/invites/:identifier
-
-	GET     /organizations/:organization_identifier/roles
-	GET     /organizations/:organization_identifier/roles/:identifier
-
-	GET     /organizations/:organization_identifier/firewall/access_rules/rules
-	POST    /organizations/:organization_identifier/firewall/access_rules/rules
-	PATCH   /organizations/:organization_identifier/firewall/access_rules/rules/:identifier
-	DELETE  /organizations/:organization_identifier/firewall/access_rules/rules/:identifier
-
-	GET     /organizations/:organization_identifier/railguns
-	POST    /organizations/:organization_identifier/railguns
-	GET     /organizations/:organization_identifier/railguns/:identifier
-	GET     /organizations/:organization_identifier/railguns/:identifier/zones
-	PATCH   /organizations/:organization_identifier/railguns/:identifier
-	DELETE  /organizations/:organization_identifier/railguns/:identifier
-
-	GET     /certificates
-	POST    /certificates
-	GET     /certificates/:identifier
-	DELETE  /certificates/:identifier
-
-	GET     /user/virtual_dns
-	POST    /user/virtual_dns
-	GET     /user/virtual_dns/:identifier
-	PATCH   /user/virtual_dns/:identifier
-	DELETE  /user/virtual_dns/:identifier
-
-	GET     /organizations/:organization_identifier/virtual_dns
-	POST    /organizations/:organization_identifier/virtual_dns
-	GET     /organizations/:organization_identifier/virtual_dns/:identifier
-	PATCH   /organizations/:organization_identifier/virtual_dns/:identifier
-	DELETE  /organizations/:organization_identifier/virtual_dns/:identifier
-
-	GET     /ips
-```
+|`GET`|`PUT`|`POST`|`PATCH`|`DELETE`|API call|
+|---|---|---|---|---|:---|
+|`GET`||`POST`||`DELETE`|/certificates|
+|||||||
+|`GET`|||||/ips|
+|||||||
+|`GET`|||`PATCH`||/organizations|
+|`GET`||`POST`|`PATCH`|`DELETE`|/organizations/:identifier/firewall/access_rules/rules|
+|`GET`||`POST`|`PATCH`|`DELETE`|/organizations/:identifier/railguns|
+|`GET`||`POST`|`PATCH`|`DELETE`|/organizations/:identifier/virtual_dns|
+|`GET`||`POST`||`DELETE`|/organizations/:identifier/invites|
+|`GET`|||`PATCH`|`DELETE`|/organizations/:identifier/members|
+|`GET`|||||/organizations/:identifier/railguns/:identifier/zones|
+|`GET`|||||/organizations/:identifier/roles|
+||||`PATCH`||/organizations/:identifier/invite|
+|||||||
+|`GET`|||||/railguns/:identifier/zones|
+|`GET`||`POST`|`PATCH`|`DELETE`|/railguns|
+|||||||
+|`GET`|||`PATCH`||/user|
+|`GET`|||||/user/billing/history|
+|`GET`|||||/user/billing/profile|
+|`GET`|||||/user/billing/subscriptions/apps|
+|`GET`|||||/user/billing/subscriptions/zones|
+|`GET`||`POST`|`PATCH`|`DELETE`|/user/firewall/access_rules/rules|
+|`GET`|||`PATCH`||/user/invites|
+|`GET`||||`DELETE`|/user/organizations|
+|`GET`||`POST`|`PATCH`|`DELETE`|/user/virtual_dns|
+|||||||
+|`GET`|`PUT`|`POST`|`PATCH`|`DELETE`|/zones/:identifier/pagerules|
+|`GET`|`PUT`|`POST`||`DELETE`|/zones/:identifier/dns_records|
+|`GET`|`PUT`||||/zones/:identifier/custom_pages|
+|`GET`||`POST`|`PATCH`|`DELETE`|/zones/:identifier/custom_certificates|
+|`GET`||`POST`|`PATCH`|`DELETE`|/zones/:identifier/firewall/access_rules/rules|
+|`GET`||`POST`|`PATCH`|`DELETE`|/zones/:identifier/keyless_certificates|
+|`GET`|||`PATCH`||/zones/:identifier/firewall/waf/packages/:identifier/groups|
+|`GET`|||`PATCH`||/zones/:identifier/firewall/waf/packages/:identifier/rules|
+|`GET`|||`PATCH`||/zones/:identifier/firewall/waf/packages|
+|`GET`|||`PATCH`||/zones/:identifier/railguns|
+|||||||
+|`GET`|||`PATCH`||/zones/:identifier/settings|
+|`GET`|||`PATCH`||/zones/:identifier/settings/always_online|
+|`GET`|||`PATCH`||/zones/:identifier/settings/browser_cache_ttl|
+|`GET`|||`PATCH`||/zones/:identifier/settings/browser_check|
+|`GET`|||`PATCH`||/zones/:identifier/settings/cache_level|
+|`GET`|||`PATCH`||/zones/:identifier/settings/challenge_ttl|
+|`GET`|||`PATCH`||/zones/:identifier/settings/development_mode|
+|`GET`|||`PATCH`||/zones/:identifier/settings/email_obfuscation|
+|`GET`|||`PATCH`||/zones/:identifier/settings/hotlink_protection|
+|`GET`|||`PATCH`||/zones/:identifier/settings/ip_geolocation|
+|`GET`|||`PATCH`||/zones/:identifier/settings/ipv6|
+|`GET`|||`PATCH`||/zones/:identifier/settings/minify|
+|`GET`|||`PATCH`||/zones/:identifier/settings/mirage|
+|`GET`|||`PATCH`||/zones/:identifier/settings/mobile_redirect|
+|`GET`|||`PATCH`||/zones/:identifier/settings/origin_error_page_pass_thru|
+|`GET`|||`PATCH`||/zones/:identifier/settings/polish|
+|`GET`|||`PATCH`||/zones/:identifier/settings/prefetch_preload|
+|`GET`|||`PATCH`||/zones/:identifier/settings/response_buffering|
+|`GET`|||`PATCH`||/zones/:identifier/settings/rocket_loader|
+|`GET`|||`PATCH`||/zones/:identifier/settings/security_header|
+|`GET`|||`PATCH`||/zones/:identifier/settings/security_level|
+|`GET`|||`PATCH`||/zones/:identifier/settings/server_side_exclude|
+|`GET`|||`PATCH`||/zones/:identifier/settings/sort_query_string_for_cache|
+|`GET`|||`PATCH`||/zones/:identifier/settings/ssl|
+|`GET`|||`PATCH`||/zones/:identifier/settings/tls_1_2_only|
+|`GET`|||`PATCH`||/zones/:identifier/settings/tls_client_auth|
+|`GET`|||`PATCH`||/zones/:identifier/settings/true_client_ip_header|
+|`GET`|||`PATCH`||/zones/:identifier/settings/waf|
+|`GET`|||||/zones/:identifier/analytics/colos|
+|`GET`|||||/zones/:identifier/analytics/dashboard|
+|`GET`|||||/zones/:identifier/available_plans|
+|`GET`|||||/zones/:identifier/railguns/:identifier/diagnose|
+|`GET`|||||/zones/:identifier/settings/advanced_ddos|
+||`PUT`||||/zones/:identifier/activation_check|
+||`PUT`||||/zones/:identifier/custom_certificates/prioritize|
+|||||`DELETE`|/zones/:identifier/purge_cache|
+|`GET`||`POST`|`PATCH`|`DELETE`|/zones|
 
 ## Adding extra API calls manually
 
