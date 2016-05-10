@@ -3,23 +3,37 @@
 import os
 from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
-    required = f.read().splitlines()
+with open('README.rst') as f:
+    long_description = f.read()
 
 setup(
-    name='python-cloudflare-v4',
-    version='1.1',
+    name='python-cloudflare-test',
+    version='1.1.9',
     description='Python wrapper for the CloudFlare v4 API',
-    author='gnowxilef,Martin J. Levy',
-    author_email='felix@fawong.com,martin@cloudflare.com',
+    long_description=long_description,
+    author='Martin J. Levy',
+    author_email='martin@cloudflare.com',
+    maintainer='Martin J. Levy',
+    maintainer_email='mahtin@mahtin.com',
     url='https://github.com/cloudflare/python-cloudflare',
+    license='MIT',
     packages=['cli4']+find_packages(),
-    install_requires=required,
+    install_requires=['requests'],
+    keywords='cloudflare',
     entry_points={
 	'console_scripts': [
 	    'cli4 = cli4.__main__:main'
 	]
-    }
+    },
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+    ]
 )
 
 package_dir = {'CloudFlare': 'lib'}
