@@ -1,13 +1,4 @@
-# cloudflare
-
-
-## Credit
-
-This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4).  It has been seriously expanded upon.
-
-## Copyright
-
-Portions copyright [Felix Wong (gnowxilef)](https://github.com/gnowxilef) 2015 and CloudFlare 2016.
+# cloudflare-python
 
 ## CloudFlare API version 4
 
@@ -330,4 +321,12 @@ $
 
 While it's easy to call anything within CloudFlare's API, it's not very useful to add items in here as they will simply return API URL errors.
 Technically, this is only useful for internal testing within CloudFlare.
+
+## Credit
+
+This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4).  It has been seriously expanded upon.
+
+## Copyright
+
+Portions copyright [Felix Wong (gnowxilef)](https://github.com/gnowxilef) 2015 and CloudFlare 2016.
 
