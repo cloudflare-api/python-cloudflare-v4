@@ -1,22 +1,43 @@
 cloudflare-python
 =================
 
+Installation
+------------
+
+Two methods are provided to install this software. Use PyPi (see
+`package <https://pypi.python.org/pypi/cloudflare>`__ details) or GitHub
+(see `package <https://github.com/cloudflare/python-cloudflare>`__
+details).
+
+Via PyPI
+~~~~~~~~
+
+.. code:: bash
+
+        $ sudo pip install cloudflare
+        $
+
+Yes - that simple! (the sudo may not be needed in some cases).
+
+Via github
+~~~~~~~~~~
+
+.. code:: bash
+
+        $ git clone https://github.com/cloudflare/python-cloudflare
+        $ cd python-cloudflare
+        $ ./setup.py build
+        $ sudo ./setup.py install
+        $
+
+Or whatever variance of that you want to use.
+
 CloudFlare API version 4
 ------------------------
 
 The CloudFlare API can be found `here <https://api.cloudflare.com/>`__.
 Each API call is provided via a similarly named function within the
 *CloudFlare* class. A full list is provided below.
-
-Installation
-------------
-
-.. code:: bash
-
-        ./setup.py build
-        sudo ./setup.py install
-
-Or whatever variance of that you want to use.
 
 Getting Started
 ---------------

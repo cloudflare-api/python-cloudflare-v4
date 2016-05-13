@@ -7,8 +7,8 @@ with open('README.rst') as f:
     long_description = f.read()
 
 setup(
-    name='python-cloudflare-test',
-    version='1.1.9',
+    name='cloudflare',
+    version='1.0.1',
     description='Python wrapper for the CloudFlare v4 API',
     long_description=long_description,
     author='Martin J. Levy',
