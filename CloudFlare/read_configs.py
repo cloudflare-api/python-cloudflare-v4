@@ -37,7 +37,8 @@ def read_configs():
 	except:
 		extras = None
 
-	extras = extras.split(' ')
+	if extras:
+		extras = extras.split(' ')
 
 	return [ email, token, certtoken, extras ]
 
