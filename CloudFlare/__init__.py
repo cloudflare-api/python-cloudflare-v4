@@ -45,14 +45,14 @@ class CloudFlare(object):
 		def _call(self, method, headers, api_call_part1, api_call_part2=None, api_call_part3=None, identifier1=None, identifier2=None, params=None, data=None):
 			if api_call_part2 is not None or (data is not None and method == 'GET'):
 				if identifier2 is None:
-					url = self.BASE_URL + '/' +  api_call_part1 + '/' + identifier1 + '/' + api_call_part2
+					url = self.BASE_URL + '/' + api_call_part1 + '/' + identifier1 + '/' + api_call_part2
 				else:
-					url = self.BASE_URL + '/' +  api_call_part1 + '/' + identifier1 + '/' + api_call_part2 + '/' + identifier2
+					url = self.BASE_URL + '/' + api_call_part1 + '/' + identifier1 + '/' + api_call_part2 + '/' + identifier2
 			else:
 				if identifier1 is None:
-					url = self.BASE_URL + '/' +  api_call_part1
+					url = self.BASE_URL + '/' + api_call_part1
 				else:
-					url = self.BASE_URL + '/' +  api_call_part1 + '/' + identifier1
+					url = self.BASE_URL + '/' + api_call_part1 + '/' + identifier1
 			if api_call_part3:
 				url += '/' + api_call_part3
 
