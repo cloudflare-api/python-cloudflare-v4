@@ -7,6 +7,7 @@ import CloudFlare
 
 import re
 import json
+import yaml
 import getopt
 
 def convert_zones_to_identifier(cf, zone_name):
@@ -92,13 +93,13 @@ def convert_virtual_dns_to_identifier(cf, virtual_dns_name):
 
 def cli4(args):
 	verbose = False
-	quiet = False
+	output = 'json'
 	method = 'GET'
 
-	usage = 'usage: cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [--get|--patch|--post|-put|--delete] [item=value ...] /command...'
+	usage = 'usage: cli4 [-h|--help] [-v|--verbose] [-q|--quiet] [-j|--json] [-y|--yaml] [--get|--patch|--post|-put|--delete] [item=value ...] /command...'
 
 	try:
-		opts, args = getopt.getopt(args, 'hvq', ['help', 'verbose', 'quiet', 'get', 'patch', 'post', 'put', 'delete'])
+		opts, args = getopt.getopt(args, 'hvqjy', ['help', 'verbose', 'quiet', 'json', 'yaml', 'get', 'patch', 'post', 'put', 'delete'])
 	except getopt.GetoptError:
 		exit(usage)
 	for opt, arg in opts:
@@ -107,7 +108,9 @@ def cli4(args):
 		elif opt in ('-v', '--verbose'):
 			verbose = True
 		elif opt in ('-q', '--quiet'):
-			quiet = True
+			output = None
+		elif opt in ('-y', '--yaml'):
+			output = 'yaml'
 		elif opt in ('--get'):
 			method = 'GET'
 		elif opt in ('-P', '--patch'):
@@ -131,8 +134,14 @@ def cli4(args):
 			value = False
 		elif value[0] is '=' and digits_only.match(value[1:]):
 			value = int(value[1:])
-		elif value[0] is '[' and value[-1] is ']':
-			value = value[1:-1].split(',')
+		elif (value[0] is '{' and value[-1] is '}') or (value[0] is '[' and value[-1] is ']'):
+			# a json structure - used in pagerules
+			try:
+				#value = json.loads(value) - changed to yaml code to remove unicode strings
+				value = yaml.safe_load(value)
+				# success
+			except ValueError:
+				exit('cli4: %s="%s" - can\'t parse json value' % (tag, value))
 		params[tag] = value
 
 	# what's left is the command itself
@@ -215,6 +224,8 @@ def cli4(args):
 	except Exception as e:
 		exit('cli4: /%s - %s - api error' % (command, e))
 
-	if not quiet:
+	if output == 'json':
 		print json.dumps(r, indent=4, sort_keys=True)
+	if output == 'yaml':
+		print yaml.dump(r)
 
