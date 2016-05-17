@@ -153,7 +153,7 @@ def main():
 		{'name':'foo', 'type':'AAAA', 'content':'2001:d8b::1'},
 		{'name':'foo', 'type':'A', 'content':'192.168.0.1'},
 		{'name':'duh', 'type':'A', 'content':'10.0.0.1', 'ttl':120},
-		{'name':'bar', 'type':'CNAME', 'content':'foo.mahtin.net'},
+		{'name':'bar', 'type':'CNAME', 'content':'foo'},
 		{'name':'shakespeare', 'type':'TXT', 'content':"What's in a name? That which we call a rose by any other name ..."}
 	]
 
@@ -192,6 +192,30 @@ The output from the CLI command is in json format (and human readable).
  * ```cli4 /zones/:example.com/analytics/dashboard```
 
 ### More complex CLI examples
+
+```bash
+$ $ cli4 --post name="test" type="A" content="10.0.0.1" /zones/:example.com/dns_records
+{
+    "id": "94e028933c87b4bff3c70a42e6daac4f",
+    "name": "test.example.com",
+    "type": "A",
+    "content": "10.0.0.1",
+    ...
+}
+$
+
+$ cli4 /zones/:example.com/dns_records/:test.example.com | jq '{"id":.id,"name":.name,"type":.type,"content":.content}'
+{
+  "id": "94e028933c87b4bff3c70a42e6daac4f",
+  "name": "test.example.com",
+  "type": "A",
+  "content": "10.0.0.1"
+}
+
+$ cli4 --delete /zones/:example.com/dns_records/:test.example.com | jq -c .
+{"id":"94e028933c87b4bff3c70a42e6daac4f"}
+$
+```
 
 ```bash
 $ cli4 --delete purge_everything=true /zones/:example.com/purge_cache | jq -c .
