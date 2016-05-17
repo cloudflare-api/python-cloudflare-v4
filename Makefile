@@ -13,7 +13,7 @@ build: setup.py
 	$(PYTHON) setup.py build
 
 install: build
-	$(PYTHON) setup.py install
+	sudo $(PYTHON) setup.py install
 
 test: all
 	# to be done

@@ -8,7 +8,7 @@ with open('README.rst') as f:
 
 setup(
     name='cloudflare',
-    version='1.0.2',
+    version='1.0.3',
     description='Python wrapper for the CloudFlare v4 API',
     long_description=long_description,
     author='Martin J. Levy',
