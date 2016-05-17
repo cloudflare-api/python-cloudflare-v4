@@ -30,6 +30,23 @@ def convert_zones_to_identifier(cf, zone_name):
 
 	exit('cli4: %s - zone not found' % (zone_name))
 
+def convert_dns_record_to_identifier(cf, zone_id, dns_name):
+	params = {'name':dns_name,'per_page':1}
+	try:
+		dns_records = cf.zones.dns_records.get(zone_id, params=params)
+	except CloudFlare.CloudFlareAPIError as e:
+		exit('cli4: %s - %d %s' % (dns_name, e, e))
+	except Exception as e:
+		exit('cli4: %s - %s' % (dns_name, e))
+
+	for dns_record in dns_records:
+		name = dns_record['name']
+		if dns_name == name:
+			dns_id = dns_record['id']
+			return dns_id
+
+	exit('cli4: %s - dns_name not found' % (dns_name))
+
 def convert_certificates_to_identifier(cf, certificate_name):
 	try:
 		certificates = cf.certificates.get()
@@ -183,22 +200,25 @@ def cli4(args):
 					identifier1 = convert_zones_to_identifier(cf, element)
 				elif cmd[0] == 'zones':
 					identifier1 = convert_zones_to_identifier(cf, element)
-				elif (cmd[0] == 'user' and cmd[1] == 'organizations') or cmd[0] == 'organizations':
+				elif cmd[0] == 'organizations':
 					identifier1 = convert_organizations_to_identifier(cf, element)
-				elif (cmd[0] == 'user' and cmd[1] == 'invites'):
+				elif (cmd[0] == 'user') and (cmd[1] == 'organizations'):
+					identifier1 = convert_organizations_to_identifier(cf, element)
+				elif (cmd[0] == 'user') and (cmd[1] == 'invites'):
 					identifier1 = convert_invites_to_identifier(cf, element)
-				elif (cmd[0] == 'user' and cmd[1] == 'virtual_dns'):
+				elif (cmd[0] == 'user') and (cmd[1] == 'virtual_dns'):
 					identifier1 = convert_virtual_dns_to_identifier(cf, element)
 				else:
-					print cmd[0], element, ':NOT CODED YET'
-					exit(0)
+					exit("/%s/%s :NOT CODED YET 1" % ('/'.join(cmd), element))
 				cmd.append(':' + identifier1)
 			else:
 				if len(element) in [32, 40, 48] and hex_only.match(element):
 					# raw identifier - lets just use it as-is
 					identifier2 = element
+				elif (cmd[0] and cmd[0] == 'zones') and (cmd[2] and cmd[2] == 'dns_records'):
+					identifier2 = convert_dns_record_to_identifier(cf, identifier1, element)
 				else:
-					identifier2 = convert_zones_to_identifier(cf, element)
+					exit("/%s/%s :NOT CODED YET 2" % ('/'.join(cmd), element))
 				cmd.append(':' + identifier2)
 		else:
 			try:
