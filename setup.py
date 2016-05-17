@@ -8,7 +8,7 @@ with open('README.rst') as f:
 
 setup(
 	name='cloudflare',
-	version='1.0.3',
+	version='1.0.4',
 	description='Python wrapper for the CloudFlare v4 API',
 	long_description=long_description,
 	author='Martin J. Levy',
@@ -18,7 +18,7 @@ setup(
 	url='https://github.com/cloudflare/python-cloudflare',
 	license='MIT',
 	packages=['cli4']+find_packages(),
-	install_requires=['requests'],
+	install_requires=['requests', 'future', 'pyyaml'],
 	keywords='cloudflare',
 	entry_points={
 		'console_scripts': [
@@ -33,6 +33,9 @@ setup(
 		'Programming Language :: Python :: 2',
 		'Programming Language :: Python :: 2.6',
 		'Programming Language :: Python :: 2.7',
+		# 'Programming Language :: Python :: 3',
+		# 'Programming Language :: Python :: 3.4',
+		# 'Programming Language :: Python :: 3.5',
 	]
 )
 

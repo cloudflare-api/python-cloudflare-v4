@@ -6,9 +6,12 @@ sys.path.insert(0, os.path.abspath('..'))
 import CloudFlare
 
 import re
-import json
-import yaml
 import getopt
+import json
+try:
+	import yaml
+except ImportError:
+	yaml = None
 
 def convert_zones_to_identifier(cf, zone_name):
 	params = {'name':zone_name,'per_page':1}
@@ -137,9 +140,10 @@ def cli4(args):
 		elif (value[0] is '{' and value[-1] is '}') or (value[0] is '[' and value[-1] is ']'):
 			# a json structure - used in pagerules
 			try:
-				#value = json.loads(value) - changed to yaml code to remove unicode strings
+				#value = json.loads(value) - changed to yaml code to remove unicode string issues
+				if yaml is None:
+					exit('cli4: install yaml support')
 				value = yaml.safe_load(value)
-				# success
 			except ValueError:
 				exit('cli4: %s="%s" - can\'t parse json value' % (tag, value))
 		params[tag] = value
@@ -226,6 +230,6 @@ def cli4(args):
 
 	if output == 'json':
 		print json.dumps(r, indent=4, sort_keys=True)
-	if output == 'yaml':
+	if output == 'yaml' and yaml is not None:
 		print yaml.dump(r)
 

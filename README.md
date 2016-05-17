@@ -338,6 +338,19 @@ $
 While it's easy to call anything within CloudFlare's API, it's not very useful to add items in here as they will simply return API URL errors.
 Technically, this is only useful for internal testing within CloudFlare.
 
+## Issues
+
+The following error can be caused by an out of date SSL/TLS library and/or out of date Python.
+
+```
+/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/util/ssl_.py:318: SNIMissingWarning: An HTTPS request has been made, but the SNI (Subject Name Indication) extension to TLS is not available on this platform. This may cause the server to present an incorrect TLS certificate, which can cause validation failures. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#snimissingwarning.
+  SNIMissingWarning
+/usr/local/lib/python2.7/dist-packages/requests/packages/urllib3/util/ssl_.py:122: InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3 from configuring SSL appropriately and may cause certain SSL connections to fail. You can upgrade to a newer version of Python to solve this. For more information, see https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
+  InsecurePlatformWarning
+```
+
+The solution can be found [here](https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning) and/or [here](http://stackoverflow.com/questions/35144550/how-to-install-cryptography-on-ubuntu).
+
 ## Credit
 
 This is based on work by [Felix Wong (gnowxilef)](https://github.com/gnowxilef) found [here](https://github.com/cloudflare-api/python-cloudflare-v4).  It has been seriously expanded upon.
