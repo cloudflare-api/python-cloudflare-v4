@@ -37,7 +37,7 @@ def main():
 		{'name':'foo', 'type':'AAAA', 'content':'2001:d8b::1'},
 		{'name':'foo', 'type':'A', 'content':'192.168.0.1'},
 		{'name':'duh', 'type':'A', 'content':'10.0.0.1', 'ttl':120},
-		{'name':'bar', 'type':'CNAME', 'content':'foo.mahtin.net'},
+		{'name':'bar', 'type':'CNAME', 'content':'foo'},
 		{'name':'shakespeare', 'type':'TXT', 'content':"What's in a name? That which we call a rose by any other name would smell as sweet."}
 	]
 
