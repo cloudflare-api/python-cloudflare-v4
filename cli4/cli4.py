@@ -23,15 +23,14 @@ def convert_zones_to_identifier(cf, zone_name):
 		exit('cli4: %s - %s' % (zone_name, e))
 
 	for zone in zones:
-		name = zone['name']
-		if zone_name == name:
-			zone_id = zone['id']
-			return zone_id
+		if zone_name == zone['name']:
+			return zone['id']
 
 	exit('cli4: %s - zone not found' % (zone_name))
 
 def convert_dns_record_to_identifier(cf, zone_id, dns_name):
-	params = {'name':dns_name,'per_page':1}
+	# this can return an array of results as there can be more than one DNS entry for a name.
+	params = {'name':dns_name}
 	try:
 		dns_records = cf.zones.dns_records.get(zone_id, params=params)
 	except CloudFlare.CloudFlareAPIError as e:
@@ -39,13 +38,14 @@ def convert_dns_record_to_identifier(cf, zone_id, dns_name):
 	except Exception as e:
 		exit('cli4: %s - %s' % (dns_name, e))
 
+	r = []
 	for dns_record in dns_records:
-		name = dns_record['name']
-		if dns_name == name:
-			dns_id = dns_record['id']
-			return dns_id
+		if dns_name == dns_record['name']:
+			r.append(dns_record['id'])
+	if len(r) > 0:
+		return r
 
-	exit('cli4: %s - dns_name not found' % (dns_name))
+	exit('cli4: %s - dns name not found' % (dns_name))
 
 def convert_certificates_to_identifier(cf, certificate_name):
 	try:
@@ -56,10 +56,8 @@ def convert_certificates_to_identifier(cf, certificate_name):
 		exit('cli4: %s - %s' % (certificate_name, e))
 
 	for certificate in certificates:
-		hostnames = certificate['hostnames']
-		if certificate_name in hostnames:
-			certificate_id = certificate['id']
-			return certificate_id
+		if certificate_name in certificate['hostnames']:
+			return certificate['id']
 
 	exit('cli4: %s - no zone certificates found' % (certificate_name))
 
@@ -72,10 +70,8 @@ def convert_organizations_to_identifier(cf, organization_name):
 		exit('cli4: %s - %s' % (organization_name, e))
 
 	for organization in organizations:
-		name = organization['name']
-		if organization_name == name :
-			organization_id = organization['id']
-			return organization_id
+		if organization_name == organization['name']:
+			return organization['id']
 
 	exit('cli4: %s - no organizations found' % (organization_name))
 
@@ -88,10 +84,8 @@ def convert_invites_to_identifier(cf, invite_name):
 		exit('cli4: %s - %s' % (invite_name, e))
 
 	for invite in invites:
-		name = invite['organization_name']
-		if invite_name == name :
-			invite_id = invite['id']
-			return invite_id
+		if invite_name == invite['organization_name']:
+			return invite['id']
 
 	exit('cli4: %s - no invites found' % (invite_name))
 
@@ -104,10 +98,8 @@ def convert_virtual_dns_to_identifier(cf, virtual_dns_name):
 		exit('cli4: %s - %s\n' % (virtual_dns_name, e))
 
 	for virtual_dns in virtual_dnss:
-		name = virtual_dns['name']
-		if virtual_dns_name == name :
-			virtual_dns_id = virtual_dns['id']
-			return virtual_dns_id
+		if virtual_dns_name == virtual_dns['name']:
+			return virtual_dns['id']
 
 	exit('cli4: %s - no virtual_dns found' % (virtual_dns_name))
 
@@ -219,7 +211,12 @@ def cli4(args):
 					identifier2 = convert_dns_record_to_identifier(cf, identifier1, element)
 				else:
 					exit("/%s/%s :NOT CODED YET 2" % ('/'.join(cmd), element))
-				cmd.append(':' + identifier2)
+				# identifier2 may be an array - this needs to be dealt with later
+				if isinstance(identifier2, list):
+					cmd.append(':' + '[' + ','.join(identifier2) + ']')
+				else:
+					cmd.append(':' + identifier2)
+					identifier2 = [identifier2]
 		else:
 			try:
 				m = getattr(m, element)
@@ -230,26 +227,35 @@ def cli4(args):
 				else:
 					exit('cli4: /%s/%s - not found' % ('/'.join(cmd), element))
 
-	try: 
-		if method is 'GET':
-			r = m.get(identifier1 = identifier1, identifier2 = identifier2, params = params)
-		elif method is 'PATCH':
-			r = m.patch(identifier1 = identifier1, identifier2 = identifier2, data = params)
-		elif method is 'POST':
-			r = m.post(identifier1 = identifier1, identifier2 = identifier2, data = params)
-		elif method is 'PUT':
-			r = m.put(identifier1 = identifier1, identifier2 = identifier2, data = params)
-		elif method is 'DELETE':
-			r = m.delete(identifier1 = identifier1, identifier2 = identifier2, data = params)
-		else:
-			pass
-	except CloudFlare.CloudFlareAPIError as e:
-		exit('cli4: /%s - %d %s' % (command, e, e))
-	except Exception as e:
-		exit('cli4: /%s - %s - api error' % (command, e))
+	results = []
+	for i2 in identifier2:
+		print 'RUNNING:', '/' + '/'.join(cmd), '-', i2
+
+		try: 
+			if method is 'GET':
+				r = m.get(identifier1 = identifier1, identifier2 = i2, params = params)
+			elif method is 'PATCH':
+				r = m.patch(identifier1 = identifier1, identifier2 = i2, data = params)
+			elif method is 'POST':
+				r = m.post(identifier1 = identifier1, identifier2 = i2, data = params)
+			elif method is 'PUT':
+				r = m.put(identifier1 = identifier1, identifier2 = i2, data = params)
+			elif method is 'DELETE':
+				r = m.delete(identifier1 = identifier1, identifier2 = i2, data = params)
+			else:
+				pass
+		except CloudFlare.CloudFlareAPIError as e:
+			exit('cli4: /%s - %d %s' % (command, e, e))
+		except Exception as e:
+			exit('cli4: /%s - %s - api error' % (command, e))
+
+		results.append(r)
+
+	if len(results) == 1:
+		results = results[0]
 
 	if output == 'json':
-		print json.dumps(r, indent=4, sort_keys=True)
+		print json.dumps(results, indent=4, sort_keys=True)
 	if output == 'yaml' and yaml is not None:
-		print yaml.dump(r)
+		print yaml.safe_dump(results)
 
