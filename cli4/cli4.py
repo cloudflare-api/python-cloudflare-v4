@@ -229,8 +229,6 @@ def cli4(args):
 
 	results = []
 	for i2 in identifier2:
-		print 'RUNNING:', '/' + '/'.join(cmd), '-', i2
-
 		try: 
 			if method is 'GET':
 				r = m.get(identifier1 = identifier1, identifier2 = i2, params = params)

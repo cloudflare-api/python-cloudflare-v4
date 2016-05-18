@@ -8,13 +8,13 @@ with open('README.rst') as f:
 
 setup(
 	name='cloudflare',
-	version='1.0.5',
+	version='1.0.6',
 	description='Python wrapper for the CloudFlare v4 API',
 	long_description=long_description,
 	author='Martin J. Levy',
 	author_email='martin@cloudflare.com',
-	maintainer='Martin J. Levy',
-	maintainer_email='mahtin@mahtin.com',
+	# maintainer='Martin J. Levy',
+	# maintainer_email='mahtin@mahtin.com',
 	url='https://github.com/cloudflare/python-cloudflare',
 	license='MIT',
 	packages=['cli4']+find_packages(),
