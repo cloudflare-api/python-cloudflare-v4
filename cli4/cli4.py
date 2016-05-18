@@ -228,6 +228,8 @@ def cli4(args):
 					exit('cli4: /%s/%s - not found' % ('/'.join(cmd), element))
 
 	results = []
+	if identifier2 is None:
+		identifier2 = [None]
 	for i2 in identifier2:
 		try: 
 			if method is 'GET':
