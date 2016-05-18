@@ -273,7 +273,7 @@ Here are the cache purging commands.
     {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
     $
 
-    $ cli4 --delete files='[http://example.com/css/styles.css,http://example.com/js/script.js] /zones/:example.com/purge_cache | jq -c .
+    $ cli4 --delete files='[http://example.com/css/styles.css,http://example.com/js/script.js]' /zones/:example.com/purge_cache | jq -c .
     {"id":"d8afaec3dd2b7f8c1b470e594a21a01d"}
     $
 
